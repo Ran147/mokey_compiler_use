@@ -1,0 +1,10 @@
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyLexer.cs
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyLexer.interp
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyLexer.tokens
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParser.cs
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParser.interp
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParser.tokens
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParserBaseListener.cs
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParserBaseVisitor.cs
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParserListener.cs
+C:/Users/alexj/OneDrive/Documentos/MonkeyCompiler/MonkeyCompiler/obj/Debug/net8.0/MonkeyParserVisitor.cs
