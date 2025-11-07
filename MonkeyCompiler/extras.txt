@@ -1,0 +1,17 @@
+﻿public override Node VisitIntegerLiteral([NotNull] MonkeyParser.IntegerLiteralContext context)
+    {
+        // (Tu código existente)
+        string text = context.INTEGER_LITERAL().GetText();
+        if (int.TryParse(text, out int value))
+        {
+            return new IntegerLiteral(value);
+        }
+        return new IntegerLiteral(0); 
+    }
+    
+    public override Node VisitIdentifier([NotNull] MonkeyParser.IdentifierContext context)
+    {
+        // (Tu código existente)
+        string name = context.IDENTIFIER().GetText();
+        return new Identifier(name);
+    }

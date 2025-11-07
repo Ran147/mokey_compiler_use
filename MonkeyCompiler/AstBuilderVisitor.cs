@@ -2,6 +2,7 @@
 
 using Antlr4.Runtime.Misc;
 using MonkeyCompiler.AST; 
+using MonkeyCompiler.AST;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ public class AstBuilderVisitor : MonkeyParserBaseVisitor<Node>
         return new LetStatement(name, declaredType, value);
     }
 
+    
     public override Node VisitIntegerLiteral([NotNull] MonkeyParser.IntegerLiteralContext context)
     {
         // (Tu código existente)
@@ -53,7 +55,6 @@ public class AstBuilderVisitor : MonkeyParserBaseVisitor<Node>
         }
         return new IntegerLiteral(0); 
     }
-    
     public override Node VisitIdentifier([NotNull] MonkeyParser.IdentifierContext context)
     {
         // (Tu código existente)
@@ -110,5 +111,67 @@ public class AstBuilderVisitor : MonkeyParserBaseVisitor<Node>
     {
         // Devolvemos lo que sea que 'primitiveExpression' nos dé.
         return Visit(context.primitiveExpression());
+    }
+    // ====================================================================
+    // 7. NEW METHODS TO BUILD THE MISSING STATEMENTS AND LITERALS
+    //    (Building upon your classmate's original file)
+    // ====================================================================
+
+    // Handles: return expression?
+    public override Node VisitReturnStatement([NotNull] MonkeyParser.ReturnStatementContext context)
+    {
+        Expression returnValue = null;
+        if (context.expression() != null)
+        {
+            returnValue = (Expression)Visit(context.expression());
+        }
+        
+        return new ReturnStatement(returnValue);
+    }
+
+    // Handles: expression
+    public override Node VisitExpressionStatement([NotNull] MonkeyParser.ExpressionStatementContext context)
+    {
+        var expression = (Expression)Visit(context.expression());
+        return new ExpressionStatement(expression);
+    }
+
+    // Handles: print ( expression )
+    public override Node VisitPrintStatement([NotNull] MonkeyParser.PrintStatementContext context)
+    {
+        var argument = (Expression)Visit(context.expression());
+        return new PrintStatement(argument);
+    }
+
+    // Handles: integerLiteral
+    // (This was missing from your last file but was in the original)
+    
+    
+    // Handles: stringLiteral
+    public override Node VisitStringLiteral([NotNull] MonkeyParser.StringLiteralContext context)
+    {
+        string text = context.STRING_LITERAL().GetText();
+        // Remove the surrounding quotes
+        return new StringLiteral(text.Substring(1, text.Length - 2));
+    }
+
+    // Handles: charLiteral
+    public override Node VisitCharLiteral([NotNull] MonkeyParser.CharLiteralContext context)
+    {
+        string text = context.CHAR_LITERAL().GetText();
+        // Get the character inside the quotes
+        return new CharLiteral(text[1]);
+    }
+
+    // Handles: booleanLiteral
+    // THIS IS THE KEY WE WERE MISSING
+    public override Node VisitBooleanLiteral([NotNull] MonkeyParser.BooleanLiteralContext context)
+    {
+        if (context.TRUE() != null)
+        {
+            return new BooleanLiteral(true);
+        }
+
+        return new BooleanLiteral(false);
     }
 }
