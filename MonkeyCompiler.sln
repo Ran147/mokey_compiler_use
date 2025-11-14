@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyCompiler", "MonkeyCompiler\MonkeyCompiler.csproj", "{4652AC7F-C826-4DF4-B542-0DB015D8F0E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyCompiler.GUI", "MonkeyCompiler.GUI\MonkeyCompiler.GUI.csproj", "{C70DD674-3AA7-41A9-A1CF-895A27786154}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{4652AC7F-C826-4DF4-B542-0DB015D8F0E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4652AC7F-C826-4DF4-B542-0DB015D8F0E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4652AC7F-C826-4DF4-B542-0DB015D8F0E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70DD674-3AA7-41A9-A1CF-895A27786154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70DD674-3AA7-41A9-A1CF-895A27786154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70DD674-3AA7-41A9-A1CF-895A27786154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70DD674-3AA7-41A9-A1CF-895A27786154}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

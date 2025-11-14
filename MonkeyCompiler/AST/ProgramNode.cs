@@ -1,10 +1,28 @@
 ﻿// AST/ProgramNode.cs
-namespace MonkeyCompiler.AST;
+using System.Collections.Generic;
 
-public class ProgramNode : Node
+namespace MonkeyCompiler.AST
 {
-    public List<Node> Declarations { get; } = new List<Node>();
+    public class ProgramNode : Node
+    {
+        // Esta es la lista que faltaba o que estaba mal escrita.
+        // Debe ser pública y debe llamarse 'Statements'
+        public List<Statement> Statements { get; } = new List<Statement>();
 
-    public override string GetAstRepresentation() => 
-        $"Program (Declarations: {Declarations.Count})";
+        // Constructor vacío (como vimos en el error anterior)
+        public ProgramNode()
+        {
+        }
+
+        // Constructor (Alternativo, por si lo prefieres, pero el de arriba es más simple)
+        // public ProgramNode(List<Statement> statements)
+        // {
+        //     Statements.AddRange(statements);
+        // }
+
+        public override string GetAstRepresentation()
+        {
+            return $"ProgramNode ({Statements.Count} statements)";
+        }
+    }
 }

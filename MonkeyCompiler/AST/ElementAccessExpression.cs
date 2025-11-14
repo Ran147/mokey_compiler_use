@@ -1,0 +1,11 @@
+﻿namespace MonkeyCompiler.AST
+{
+    public class ElementAccessExpression : Expression
+    {
+        public Expression Left { get; set; }
+        public Expression Index { get; set; }
+
+        // FIX: Implementación del método abstracto
+        public override string GetAstRepresentation() => $"({Left.GetAstRepresentation()}[{Index.GetAstRepresentation()}])";
+    }
+}

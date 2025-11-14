@@ -1,17 +1,26 @@
 ﻿// TypeChecker/TypeException.cs
 using System;
-using MonkeyCompiler.AST;
+using MonkeyCompiler.AST; // Asegúrate de tener esto
 
 namespace MonkeyCompiler.TypeChecker;
 
 public class TypeException : Exception
 {
-    public Node Node { get; } 
-    
-    // Lanza la excepción con el nodo para saber dónde ocurrió el error.
-    public TypeException(string message, Node node) 
-        : base($"[ERROR SEMÁNTICO DE TIPO] {message}. En el nodo: {node.GetAstRepresentation()}")
+    // Almacena el nodo del AST que causó el error
+    public Node AstNode { get; } 
+
+    // Constructor que ahora acepta el nodo
+    public TypeException(string message, Node node) : base(message)
     {
-        Node = node;
+        AstNode = node;
+    }
+    
+    // Dejamos el constructor antiguo por si acaso,
+    // pero lo marcamos como obsoleto.
+    [Obsolete("Use constructor that includes the AST Node")]
+    public TypeException(string message) : base(message)
+    {
+        // Si se llama a este, asignamos un nodo "vacío"
+        AstNode = new ProgramNode(); 
     }
 }
