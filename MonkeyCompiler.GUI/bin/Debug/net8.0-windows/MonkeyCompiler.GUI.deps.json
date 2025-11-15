@@ -550,10 +550,7 @@
           "Antlr4BuildTasks": "12.11.0"
         },
         "runtime": {
-          "MonkeyCompiler.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "MonkeyCompiler.dll": {}
         }
       }
     }

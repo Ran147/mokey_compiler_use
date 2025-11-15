@@ -1,32 +1,16 @@
-﻿/*
- * Este es un archivo de prueba de Monkey.
- * Contiene un comentario de bloque principal.
- *
- * /*
- * Y aquí... un comentario anidado.
- * El lexer debería ignorar todo esto.
- * */
- *
- * Volvemos al bloque principal.
-*/
-
-// Declaraciones de variables
-let age: int = 30
-let name: string = "Monkey" // Comentario de línea
-
-// Una función simple
-fn add(a: int, b: int) : int {
-    return a + b
+// 1. Define la función recursiva
+fn fibonacci(x: int) : int {
+    if (x == 0) {
+        return 0;
+    } else if (x == 1) {
+        return 1;
+    } else {
+        return fibonacci(x - 1) + fibonacci(x - 2);
+    }
 }
-// Prueba de sintaxis extraña
-let y: bool = (5 < 10) == true
 
-// El punto de entrada principal
+// 2. Define el punto de entrada (main) que la llama
 fn main() : void {
-    let x: int = add(age, 5)
-    print(x)
+    let resultado: int = fibonacci(7); // Llama a la función
+    print(resultado); // Imprime el resultado
 }
-
-
-
-/* Comentario final */

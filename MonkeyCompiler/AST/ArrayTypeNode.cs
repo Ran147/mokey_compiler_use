@@ -1,4 +1,6 @@
-﻿namespace MonkeyCompiler.AST
+﻿using MonkeyCompiler.Encoder;
+
+namespace MonkeyCompiler.AST
 {
     public class ArrayTypeNode : TypeNode
     {
@@ -7,5 +9,9 @@
 
         // FIX: Implementación del método abstracto
         public override string GetAstRepresentation() => $"array<{ElementType.GetAstRepresentation()}>";
+        public override void Accept(IAstVisitor visitor)
+        {
+            
+        }
     }
 }

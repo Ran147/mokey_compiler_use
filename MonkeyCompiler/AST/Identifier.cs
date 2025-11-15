@@ -1,5 +1,6 @@
 ﻿// AST/Identifier.cs
 namespace MonkeyCompiler.AST;
+using MonkeyCompiler.Encoder;
 
 public class Identifier : Expression
 {
@@ -10,4 +11,8 @@ public class Identifier : Expression
         Name = name;
     }
     public override string GetAstRepresentation() => $"ID({Name})";
+    public override void Accept(IAstVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

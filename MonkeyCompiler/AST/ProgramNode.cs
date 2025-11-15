@@ -1,5 +1,6 @@
 ﻿// AST/ProgramNode.cs
 using System.Collections.Generic;
+using MonkeyCompiler.Encoder;
 
 namespace MonkeyCompiler.AST
 {
@@ -23,6 +24,10 @@ namespace MonkeyCompiler.AST
         public override string GetAstRepresentation()
         {
             return $"ProgramNode ({Statements.Count} statements)";
+        }
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

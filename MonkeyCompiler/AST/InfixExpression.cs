@@ -1,4 +1,6 @@
-﻿namespace MonkeyCompiler.AST
+﻿using MonkeyCompiler.Encoder;
+namespace MonkeyCompiler.AST
+
 {
     public class InfixExpression : Expression
     {
@@ -8,5 +10,9 @@
 
         // FIX: Implementación del método abstracto
         public override string GetAstRepresentation() => $"({Left.GetAstRepresentation()} {Operator} {Right.GetAstRepresentation()})";
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

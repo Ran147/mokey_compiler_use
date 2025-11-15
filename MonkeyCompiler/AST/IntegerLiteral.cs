@@ -1,4 +1,5 @@
 ﻿// AST/IntegerLiteral.cs
+using MonkeyCompiler.Encoder;
 namespace MonkeyCompiler.AST;
 
 public class IntegerLiteral : Expression
@@ -11,4 +12,8 @@ public class IntegerLiteral : Expression
         Type = "int";
     }
     public override string GetAstRepresentation() => $"INT({Value})";
+    public override void Accept(IAstVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

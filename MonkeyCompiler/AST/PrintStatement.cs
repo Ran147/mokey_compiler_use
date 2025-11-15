@@ -1,4 +1,5 @@
-﻿namespace MonkeyCompiler.AST
+﻿using MonkeyCompiler.Encoder;
+namespace MonkeyCompiler.AST
 {
     public class PrintStatement : Statement
     {
@@ -13,6 +14,10 @@
         public override string GetAstRepresentation()
         {
             return $"print({Argument.GetAstRepresentation()})";
+        }
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

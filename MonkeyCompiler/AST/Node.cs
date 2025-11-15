@@ -1,7 +1,8 @@
 ﻿// AST/Node.cs
 namespace MonkeyCompiler.AST;
 
-using System.Collections.Generic;
+
+using MonkeyCompiler.Encoder; // <-- ¡AGREGA ESTE USING!
 
 // Clase base de la que heredarán todas las partes del AST.
 public abstract class Node
@@ -11,4 +12,9 @@ public abstract class Node
 
     // Método para imprimir una representación limpia del AST (útil para depurar).
     public abstract string GetAstRepresentation();
+    
+   
+    // Esta es la línea que te está dando los errores, lo cual es correcto.
+    public abstract void Accept(IAstVisitor visitor);
+    // --- FIN DE LO AGREGADO ---
 }

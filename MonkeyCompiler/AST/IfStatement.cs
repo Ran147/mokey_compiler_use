@@ -1,4 +1,5 @@
-﻿namespace MonkeyCompiler.AST
+﻿using MonkeyCompiler.Encoder;
+namespace MonkeyCompiler.AST
 {
     public class IfStatement : Statement
     {
@@ -11,6 +12,10 @@
         {
             string alt = Alternative != null ? " ELSE ..." : "";
             return $"IF ({Condition.GetAstRepresentation()}) {{ ... }}{alt}";
+        }
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

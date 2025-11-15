@@ -1,4 +1,7 @@
 ﻿// AST/LetStatement.cs
+
+using MonkeyCompiler.Encoder;
+
 namespace MonkeyCompiler.AST;
 
 public class LetStatement : Statement
@@ -15,4 +18,8 @@ public class LetStatement : Statement
     }
     public override string GetAstRepresentation() => 
         $"LET {DeclaredType} {Name} = {Value.GetAstRepresentation()}";
+    public override void Accept(IAstVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

@@ -1,4 +1,6 @@
-﻿namespace MonkeyCompiler.AST
+﻿using MonkeyCompiler.Encoder;
+
+namespace MonkeyCompiler.AST
 {
     public class BooleanLiteral : Expression
     {
@@ -18,6 +20,10 @@
         public override string GetAstRepresentation()
         {
             return $"BOOL({Value.ToString().ToUpper()})";
+        }
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

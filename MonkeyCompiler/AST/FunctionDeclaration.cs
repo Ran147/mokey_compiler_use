@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MonkeyCompiler.Encoder;
 
 namespace MonkeyCompiler.AST
 {
@@ -15,6 +16,10 @@ namespace MonkeyCompiler.AST
         {
             var paramTypes = string.Join(", ", Parameters.Select(p => p.GetAstRepresentation()));
             return $"fn {Name.GetAstRepresentation()}({paramTypes}) : {ReturnType.GetAstRepresentation()} {{ ... }}";
+        }
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

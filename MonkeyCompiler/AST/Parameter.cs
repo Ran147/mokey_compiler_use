@@ -1,4 +1,4 @@
-﻿
+﻿using MonkeyCompiler.Encoder;
 namespace MonkeyCompiler.AST
 {
     public class Parameter : Node
@@ -8,5 +8,9 @@ namespace MonkeyCompiler.AST
 
         // FIX: Implementación del método abstracto
         public override string GetAstRepresentation() => $"{Name.GetAstRepresentation()} : {ValueType.GetAstRepresentation()}";
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

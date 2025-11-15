@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using MonkeyCompiler.Encoder;
 namespace MonkeyCompiler.AST
 {
     public class StringLiteral : Expression
@@ -19,6 +20,10 @@ namespace MonkeyCompiler.AST
         public override string GetAstRepresentation()
         {
             return $"STRING({Value})";
+        }
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

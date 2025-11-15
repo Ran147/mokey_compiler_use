@@ -1,4 +1,5 @@
-﻿namespace MonkeyCompiler.AST
+﻿using MonkeyCompiler.Encoder;
+namespace MonkeyCompiler.AST
 {
     public class ElementAccessExpression : Expression
     {
@@ -7,5 +8,10 @@
 
         // FIX: Implementación del método abstracto
         public override string GetAstRepresentation() => $"({Left.GetAstRepresentation()}[{Index.GetAstRepresentation()}])";
+        public override void Accept(IAstVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
+    
 }

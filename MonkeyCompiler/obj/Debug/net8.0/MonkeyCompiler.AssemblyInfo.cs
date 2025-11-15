@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MonkeyCompiler")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3bb8c26becc01bbfd53f354610ca03a6a8e9baa5")]
 [assembly: System.Reflection.AssemblyProductAttribute("MonkeyCompiler")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MonkeyCompiler")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
