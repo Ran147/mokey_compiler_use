@@ -1,205 +1,165 @@
-// Añade estos 'usings' al inicio de tu archivo Form1.cs
+// --- AGREGA ESTOS USINGS AL INICIO ---
 using Antlr4.Runtime;
 using MonkeyCompiler.AST;
 using MonkeyCompiler.TypeChecker;
-using System.IO; // Necesario para StringWriter
-namespace MonkeyCompiler.GUI;
+using MonkeyCompiler.Encoder; // <-- Nuevo
+using System.IO; 
+using System.Reflection;     // <-- Nuevo
+using System.Reflection.Emit; // <-- Nuevo
+// --- FIN DE USINGS ---
 
-public partial class Form1 : Form
+namespace MonkeyCompiler.GUI
 {
-    private string monkeyFilePath;
-    public Form1()
+    public partial class Form1 : Form
     {
-        InitializeComponent();
+        private string monkeyFilePath;
+        public Form1()
+        {
+            InitializeComponent();
             
-        // --- NUEVO ---
-        // Calculamos la ruta relativa al archivo Codigo.monkey
-        // Application.StartupPath es donde está tu .exe (ej. ...\MonkeyCompiler.GUI\bin\Debug\net8.0-windows)
-        // Subimos 4 niveles (..., ..., bin, GUI) para llegar a la raíz (MonkeyCompiler-main)
-        // y luego bajamos a "MonkeyCompiler/Codigo.monkey"
-        string exePath = Application.StartupPath;
-        string solutionRoot = Path.GetFullPath(Path.Combine(exePath, @"../../../../"));
-        monkeyFilePath = Path.Combine(solutionRoot, "MonkeyCompiler", "Codigo.monkey");
-    }
-
-    private void btnRun_Click(object sender, EventArgs e)
-    {
-        // --- 1. GUARDAR ARCHIVO (Sin cambios) ---
-        try
-        {
-            string codeToSave = txtCode.Text;
-            File.WriteAllText(monkeyFilePath, codeToSave);
-        }
-        catch (Exception ex)
-        {
-            txtOutput.Text = $"ERROR: No se pudo guardar el archivo '{monkeyFilePath}'.\n{ex.Message}\n\nCompilación cancelada.";
-            return; 
+            // Lógica para encontrar el archivo Codigo.monkey
+            string exePath = Application.StartupPath;
+            string solutionRoot = Path.GetFullPath(Path.Combine(exePath, @"../../../../"));
+            monkeyFilePath = Path.Combine(solutionRoot, "MonkeyCompiler", "Codigo.monkey");
         }
 
-        // --- 2. CONFIGURAR CAPTURA DE CONSOLA (¡NUEVO!) ---
-        // Cualquier 'Console.WriteLine' de ahora en adelante
-        // será capturado por 'consoleOutput'.
-        StringWriter consoleOutput = new StringWriter();
-        var originalConsoleOut = Console.Out;
-        Console.SetOut(consoleOutput);
-
-        // --- 3. PROCESO DE COMPILACIÓN (con try/catch/finally) ---
-        try
+        // --- ¡MÉTODO btnRun_Click REEMPLAZADO! ---
+        private void btnRun_Click(object sender, EventArgs e)
         {
-            // Replicamos la salida de RunMonkeyCompiler.cs
-            Console.WriteLine($"Archivo '{monkeyFilePath}' guardado.");
-            Console.WriteLine("--- Iniciando Parser (Análisis Sintáctico) ---");
-
-            string sourceCode = txtCode.Text;
-            AntlrInputStream inputStream = new AntlrInputStream(sourceCode);
-            MonkeyLexer lexer = new MonkeyLexer(inputStream);
-            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-            MonkeyParser parser = new MonkeyParser(tokenStream);
-            var parseTree = parser.program(); 
-
-            Console.WriteLine("--- Análisis Sintáctico Terminado ---");
-            Console.WriteLine(""); // Salto de línea
-
-            Console.WriteLine("--- Iniciando AST Builder ---");
-            
-            // Nuestro TypeCheckerVisitor es también el AstBuilder
-            var visitor = new TypeCheckerVisitor();
-            ProgramNode astRoot = (ProgramNode)visitor.Visit(parseTree);
-
-            Console.WriteLine($"--- Construcción del AST Terminada. Raíz: {astRoot.GetType().Name} ({astRoot.Statements.Count} statements) ---");
-            Console.WriteLine("");
-            
-            // ¡¡AQUÍ ES DONDE LLAMAMOS AL MÉTODO NUEVO!!
-            Console.WriteLine("--- Verificación del AST (Imprimiendo sentencias) ---");
-            PrintAst(astRoot); // Esto imprimirá el "LET int age = INT(30)"...
-            Console.WriteLine("--- Fin de la Verificación del AST ---");
-            Console.WriteLine("");
-
-            // El chequeo de tipos YA OCURRIÓ durante visitor.Visit()
-            // Si no lanzó una excepción, estamos bien.
-            Console.WriteLine("--- Iniciando Type Checker ---");
-            Console.WriteLine("=============================================");
-            Console.WriteLine("? ¡VERIFICACIÓN DE TIPOS EXITOSA! ESTÁS LISTO PARA EL ENCODER.");
-            Console.WriteLine("=============================================");
-            
-            // 4. PREPARACIÓN PARA LA FASE 5 (Encoder)
-            // Si el Encoder también usa Console.WriteLine, ¡también será capturado!
-            txtOutput.Text += RunEncoder(astRoot); // <-- Descomentar en el futuro
-            Console.WriteLine("--- Proceso del Compilador Terminado ---"); // <--- Mover esta línea aquí
-        }
-        catch (TypeException typeEx)
-        {
-            // Si hay un error, también se escribe en la consola
-            Console.WriteLine("");
-            Console.WriteLine($"? FALLO SEMÁNTICO (Tabla de Símbolos): {typeEx.Message}");
-        }
-        catch (Exception ex)
-        {
-            // Captura cualquier otro error (ej. sintaxis)
-            Console.WriteLine("");
-            Console.WriteLine($"? FALLO DEL COMPILADOR: {ex.Message}");
-        }
-        finally
-        {
-            // --- 4. RESTAURAR CONSOLA Y MOSTRAR SALIDA ---
-            // Pase lo que pase, restauramos la consola original
-            Console.SetOut(originalConsoleOut); 
-            
-            // ¡Tomamos todo lo que se "imprimió" y lo ponemos en el TextBox!
-            txtOutput.Text = consoleOutput.ToString();
-        }
-    }
-
-    private void Form1_Load(object sender, EventArgs e)
-    {
-        // Título de la ventana
-        this.Text = "Monkey Compiler IDE";
-
-        // Intentamos cargar el archivo
-        try
-        {
-            if (File.Exists(monkeyFilePath))
+            // --- 1. GUARDAR Y PREPARAR ---
+            try
             {
-                // --- ESTA ES LA PARTE CORREGIDA ---
-            
-                // 1. Leemos el archivo en un array, línea por línea.
-                //    Esto maneja CUALQUIER tipo de salto de línea (\n o \r\n).
-                string[] lines = File.ReadAllLines(monkeyFilePath);
-            
-                // 2. Unimos las líneas usando el salto de línea 
-                //    correcto para el sistema actual (Windows).
-                txtCode.Text = string.Join(Environment.NewLine, lines);
-            
-                // --- FIN DE LA CORRECCIÓN ---
-
-                txtOutput.Text = $"Archivo '{monkeyFilePath}' cargado exitosamente.";
+                string codeToSave = txtCode.Text;
+                File.WriteAllText(monkeyFilePath, codeToSave);
             }
-            else
+            catch (Exception ex)
             {
-                txtOutput.Text = $"ERROR: No se encontró el archivo en '{monkeyFilePath}'.";
+                txtOutput.Text = $"ERROR: No se pudo guardar el archivo '{monkeyFilePath}'.\n{ex.Message}\n\nCompilación cancelada.";
+                return; 
             }
-        }
-        catch (Exception ex)
-        {
-            txtOutput.Text = $"ERROR al cargar 'Codigo.monkey': {ex.Message}";
-        }
-    }
-    private void PrintAst(ProgramNode node)
-    {
-        foreach (var stmt in node.Statements)
-        {
-            // ¡Aquí está la magia!
-            // Le decimos que escriba en la consola,
-            // la cual estaremos capturando.
-            Console.WriteLine(stmt.GetAstRepresentation());
-        }
-    }
-    private string RunEncoder(ProgramNode astRoot)
-    {
-        // Usaremos StringWriter para capturar la salida de esta función simulada.
-        StringWriter outputCapture = new StringWriter();
-    
-        outputCapture.WriteLine("\n--- Iniciando Ejecución Simulada (Fase 5: Encoder) ---");
-    
-        // --- LÓGICA DE SIMULACIÓN ---
-        foreach (var statement in astRoot.Statements)
-        {
-            // 1. Buscamos la función principal
-            if (statement is MainFunction mainFn)
+            
+            txtOutput.ForeColor = Color.White; 
+            txtOutput.Text = string.Empty;
+
+            // --- 2. CAPTURAR CONSOLA ---
+            StringWriter consoleOutput = new StringWriter();
+            var originalConsoleOut = Console.Out;
+            Console.SetOut(consoleOutput);
+
+            ProgramNode astRoot = null; 
+
+            // --- 3. PROCESO DE COMPILACIÓN ---
+            try
             {
-                // La ejecución del código real ocurre dentro del main
-                foreach (var innerStatement in mainFn.Body.Statements)
+                // --- FASES 1-4 (Lexer, Parser, AST Builder, TypeChecker) ---
+                Console.WriteLine($"Archivo '{monkeyFilePath}' guardado.");
+                Console.WriteLine("--- Iniciando Parser (Análisis Sintáctico) ---");
+
+                string sourceCode = txtCode.Text;
+                AntlrInputStream inputStream = new AntlrInputStream(sourceCode);
+                MonkeyLexer lexer = new MonkeyLexer(inputStream);
+                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+                MonkeyParser parser = new MonkeyParser(tokenStream);
+                var parseTree = parser.program(); 
+
+                Console.WriteLine("--- Análisis Sintáctico Terminado ---\r\n");
+                Console.WriteLine("--- Iniciando AST Builder & Type Checker ---");
+                
+                var visitor = new TypeCheckerVisitor();
+                astRoot = (ProgramNode)visitor.Visit(parseTree); 
+
+                Console.WriteLine("✅ ¡AST construido y tipos verificados exitosamente!\r\n");
+                
+                // (Opcional) Imprimir AST
+                Console.WriteLine("--- Verificación del AST (Imprimiendo sentencias) ---");
+                PrintAst(astRoot); 
+                Console.WriteLine("--- Fin de la Verificación del AST ---\r\n");
+
+                // --- FASE 5: ENCODER ---
+                Console.WriteLine("--- Iniciando Encoder (Generación CIL) ---");
+                EncoderVisitor encoder = new EncoderVisitor();
+                
+                astRoot.Accept(encoder);
+                
+                Console.WriteLine("--- Generación CIL Terminada ---");
+
+                // --- FASE 6: EJECUCIÓN ---
+                Console.WriteLine("\n--- Ejecutando código compilado... ---");
+
+                Assembly asm = encoder.GetAssembly(); // <-- ¡Esta línea ahora funciona!
+                Type programType = asm.GetType("Program");
+                MethodInfo mainMethod = programType.GetMethod("main");
+                
+                if (mainMethod == null)
                 {
-                    if (innerStatement is PrintStatement printStmt)
-                    {
-                        // ¡Encontramos un print! Simularemos su salida.
-                        string printExpression = printStmt.Argument.GetAstRepresentation();
-                    
-                        // LÓGICA DE SIMULACIÓN BÁSICA:
-                        if (printExpression.Contains("\""))
-                        {
-                            // Si es un string literal
-                            outputCapture.WriteLine(printExpression.Trim('"'));
-                        }
-                        else if (printExpression.Contains("50 - 15"))
-                        {
-                            outputCapture.WriteLine(35); // Resultado conocido
-                        }
-                        else if (printExpression.Contains("(10 + 20) * 3"))
-                        {
-                            outputCapture.WriteLine(90); // Resultado conocido
-                        }
-                        else
-                        {
-                            // Para cualquier otra cosa (variables, llamadas a función, etc.)
-                            outputCapture.WriteLine($"[RESULTADO DE: {printExpression}]");
-                        }
-                    }
+                    throw new InvalidOperationException("Fallo del Encoder: No se encontró el método 'main'.");
+                }
+                
+                mainMethod.Invoke(null, null);
+
+                Console.WriteLine("--- Ejecución Terminada ---");
+                Console.WriteLine("\n--- Proceso del Compilador Terminado ---");
+            }
+            catch (TypeException typeEx)
+            {
+                Console.WriteLine("");
+                Console.WriteLine($"❌ FALLO SEMÁNTICO (Tabla de Símbolos): {typeEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("");
+                Console.WriteLine($"❌ FALLO DEL COMPILADOR: {ex.Message}\n{ex.StackTrace}");
+            }
+            finally
+            {
+                // --- 4. RESTAURAR CONSOLA Y MOSTRAR SALIDA ---
+                Console.SetOut(originalConsoleOut); 
+                string output = consoleOutput.ToString();
+                
+                if (output.Contains("❌"))
+                {
+                    txtOutput.ForeColor = Color.Red;
+                }
+                else
+                {
+                    txtOutput.ForeColor = Color.LimeGreen; 
+                }
+                txtOutput.Text = output;
+            }
+        }
+
+        // --- (Método Form1_Load sin cambios) ---
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.Text = "Monkey Compiler IDE";
+            try
+            {
+                if (File.Exists(monkeyFilePath))
+                {
+                    string[] lines = File.ReadAllLines(monkeyFilePath);
+                    txtCode.Text = string.Join(Environment.NewLine, lines);
+                    txtOutput.Text = $"Archivo '{monkeyFilePath}' cargado exitosamente.";
+                }
+                else
+                {
+                    txtOutput.Text = $"ERROR: No se encontró el archivo en '{monkeyFilePath}'.";
                 }
             }
+            catch (Exception ex)
+            {
+                txtOutput.Text = $"ERROR al cargar 'Codigo.monkey': {ex.Message}";
+            }
         }
-        outputCapture.WriteLine("--- Ejecución Simulada Terminada ---");
-    
-        return outputCapture.ToString();
+
+        // --- (Método PrintAst sin cambios) ---
+        private void PrintAst(ProgramNode node)
+        {
+            foreach (var stmt in node.Statements)
+            {
+                Console.WriteLine(stmt.GetAstRepresentation());
+            }
+        }
+        
+        // --- (ELIMINAMOS EL MÉTODO 'RunEncoder' SIMULADO) ---
     }
 }

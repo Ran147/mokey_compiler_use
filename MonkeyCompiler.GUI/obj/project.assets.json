@@ -3651,19 +3651,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alexj\\.nuget\\packages\\": {}
+    "C:\\Users\\Siroko147\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alexj\\Downloads\\MonkeyCompiler-main\\MonkeyCompiler.GUI\\MonkeyCompiler.GUI.csproj",
+      "projectUniqueName": "C:\\Users\\Siroko147\\Documents\\compiladores_interpretes\\MonkeyCompiler\\MonkeyCompiler.GUI\\MonkeyCompiler.GUI.csproj",
       "projectName": "MonkeyCompiler.GUI",
-      "projectPath": "C:\\Users\\alexj\\Downloads\\MonkeyCompiler-main\\MonkeyCompiler.GUI\\MonkeyCompiler.GUI.csproj",
-      "packagesPath": "C:\\Users\\alexj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alexj\\Downloads\\MonkeyCompiler-main\\MonkeyCompiler.GUI\\obj\\",
+      "projectPath": "C:\\Users\\Siroko147\\Documents\\compiladores_interpretes\\MonkeyCompiler\\MonkeyCompiler.GUI\\MonkeyCompiler.GUI.csproj",
+      "packagesPath": "C:\\Users\\Siroko147\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Siroko147\\Documents\\compiladores_interpretes\\MonkeyCompiler\\MonkeyCompiler.GUI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\alexj\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Siroko147\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0-windows"
@@ -3675,8 +3675,8 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\alexj\\Downloads\\MonkeyCompiler-main\\MonkeyCompiler\\MonkeyCompiler.csproj": {
-              "projectPath": "C:\\Users\\alexj\\Downloads\\MonkeyCompiler-main\\MonkeyCompiler\\MonkeyCompiler.csproj"
+            "C:\\Users\\Siroko147\\Documents\\compiladores_interpretes\\MonkeyCompiler\\MonkeyCompiler\\MonkeyCompiler.csproj": {
+              "projectPath": "C:\\Users\\Siroko147\\Documents\\compiladores_interpretes\\MonkeyCompiler\\MonkeyCompiler\\MonkeyCompiler.csproj"
             }
           }
         }
@@ -3685,11 +3685,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3714,7 +3709,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\alexj\\.dotnet\\sdk\\8.0.415/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

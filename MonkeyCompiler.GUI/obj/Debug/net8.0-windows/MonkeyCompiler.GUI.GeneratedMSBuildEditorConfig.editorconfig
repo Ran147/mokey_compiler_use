@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MonkeyCompiler.GUI
-build_property.ProjectDir = C:\Users\alexj\Downloads\MonkeyCompiler-main\MonkeyCompiler.GUI\
+build_property.ProjectDir = C:\Users\Siroko147\Documents\compiladores_interpretes\MonkeyCompiler\MonkeyCompiler.GUI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
